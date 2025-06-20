@@ -20,5 +20,5 @@ func CreateShortURL(originalURL string) string {
 }
 
 func GetOriginalURL(id string) (models.URL, error) {
-	return store.GetURL(id)
+	return store.GetURLByID(id)
 }

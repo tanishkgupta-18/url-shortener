@@ -45,7 +45,11 @@ func Redirect(w http.ResponseWriter, r *http.Request) {
 
 func Analytics(w http.ResponseWriter, r *http.Request) {
 	id := strings.TrimPrefix(r.URL.Path, "/analytics/")
-	visits := service.GetAnalytics(id)
+	visits, err := service.GetAnalytics(id)
+	if err != nil {
+		http.Error(w, "Analytics not found", http.StatusNotFound)
+		return
+	}
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(visits)

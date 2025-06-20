@@ -1,11 +1,23 @@
 package service
 
-import "url-shortener/store"
+import (
+	"time"
+	"url-shortener/models"
+	"url-shortener/store"
+)
 
-func TrackVisit(id, ip, userAgent string) {
-	store.LogVisit(id, ip, userAgent)
+// TrackVisit saves visit info to MongoDB
+func TrackVisit(id, ip, userAgent string) error {
+	visit := models.Visit{
+		ID:        id,
+		IP:        ip,
+		UserAgent: userAgent,
+		AccessedAt: time.Now(),
+	}
+	return store.SaveVisit(visit) 
 }
 
-func GetAnalytics(id string) any {
-	return store.GetVisits(id)
+// GetAnalytics returns all visit records for given URL id
+func GetAnalytics(id string) ([]models.Visit, error) {
+	return store.GetVisitsByID(id) 
 }
